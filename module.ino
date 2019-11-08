@@ -1,56 +1,113 @@
 // defines pins numbers
-const int stepPin = 12; 
-const int dirPin = 26;
+const int step_pin_x = 12; 
+const int dir_pin_x = 26;
 
-int should_run = 1;
-int real_state = '0';
+const int step_pin_y1 = 14; 
+const int dir_pin_y1 = 25;
+
+const int step_pin_y2 = 27; 
+const int dir_pin_y2 = 33;
+
+int should_run_x = 0;
+int real_state_x = '0';
+
+int should_run_y = 0;
+int real_state_y = '0';
+
+int spd = 380;
 
 void setup() {
-  // Sets the two pins as Outputs
-  pinMode(stepPin,OUTPUT); 
-  pinMode(dirPin,OUTPUT);
+  pinMode(step_pin_x,OUTPUT);
+  pinMode(dir_pin_x,OUTPUT);
+
+  pinMode(step_pin_y1,OUTPUT);
+  pinMode(dir_pin_y1,OUTPUT);
+
+  pinMode(step_pin_y2,OUTPUT);
+  pinMode(dir_pin_y2,OUTPUT);
   Serial.begin(9600);
 }
 
 void loop() {
-    // Serial.println(should_run);
-    // Serial.println(real_state);
+    // Serial.println(should_run_x);
+    // Serial.println(real_state_x);
 
     if(Serial.available()){
-        int state = Serial.read();
+        int state_x = Serial.read();
+        int state_y = Serial.read();
 
-        if(state == '1' && real_state != '1'){
-            digitalWrite(dirPin,HIGH);
+        if(state_x == '1' && real_state_x != '1'){
+            digitalWrite(dir_pin_x,HIGH);
             
-            if(real_state == 2){
+            if(real_state_x == 2){
                 // Should change dir
-                delayMicroseconds(450);
-                digitalWrite(stepPin,LOW);
+                delayMicroseconds(spd);
+                digitalWrite(step_pin_x,LOW);
             }
 
-            should_run = 1;
-            real_state = '1';
-        }else if(state == '2' && real_state != '2'){
-            digitalWrite(dirPin,LOW);
+            should_run_x = 1;
+            real_state_x = '1';
+        }else if(state == '2' && real_state_x != '2'){
+            digitalWrite(dir_pin_x,LOW);
 
-            if(real_state == '1'){
+            if(real_state_x == '1'){
                 // Should change dir
-                delayMicroseconds(450);
-                digitalWrite(stepPin,LOW);
+                delayMicroseconds(spd);
+                digitalWrite(step_pin_x,LOW);
             }
             
-            should_run = 1;
-            real_state = '2';
-        }else{
-            should_run = 0;
-            real_state = state;
+            should_run_x = 1;
+            real_state_x = '2';
+        }else if{
+            should_run_x = 0;
+            real_state_x = state;
+        }
+
+        if(state_y == '1' && real_state_y != '1'){
+            digitalWrite(dir_pin_y1,HIGH);
+            digitalWrite(dir_pin_y2,LOW);
+            
+            if(real_state_y == 2){
+                // Should change dir
+                delayMicroseconds(spd);
+                digitalWrite(step_pin_y1,LOW);
+                digitalWrite(step_pin_y2,LOW);
+            }
+
+            should_run_y = 1;
+            real_state_y = '1';
+        }else if(state == '2' && real_state_y != '2'){
+            digitalWrite(dir_pin_y1,LOW);
+            digitalWrite(dir_pin_y2,HIGH);
+
+            if(real_state_y == '1'){
+                // Should change dir
+                delayMicroseconds(spd);
+                digitalWrite(step_pin_y1,LOW);
+                digitalWrite(step_pin_y2,LOW);
+            }
+            
+            should_run_y = 1;
+            real_state_y = '2';
+        }else if{
+            should_run_y = 0;
+            real_state_y = state;
         }
     }
 
-    if(should_run){
-        delayMicroseconds(450);
-        digitalWrite(stepPin,HIGH); 
-        delayMicroseconds(450);
-        digitalWrite(stepPin,LOW);
+    if(should_run_x){
+        delayMicroseconds(spd);
+        digitalWrite(step_pin_x,HIGH); 
+        delayMicroseconds(spd);
+        digitalWrite(step_pin_x,LOW);
+    }
+
+    if(should_run_y){
+        delayMicroseconds(spd);
+        digitalWrite(step_pin_y1,HIGH);
+        digitalWrite(step_pin_y2,HIGH); 
+        delayMicroseconds(spd);
+        digitalWrite(step_pin_y1,LOW);
+        digitalWrite(step_pin_y2,LOW);
     }
 }
