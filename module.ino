@@ -2,7 +2,7 @@
 const int stepPin = 12; 
 const int dirPin = 26;
 
-int should_run = '0';
+int should_run = 1;
 int real_state = '0';
 
 void setup() {
@@ -28,7 +28,7 @@ void loop() {
                 digitalWrite(stepPin,LOW);
             }
 
-            should_run = '1';
+            should_run = 1;
             real_state = '1';
         }else if(state == '2' && real_state != '2'){
             digitalWrite(dirPin,LOW);
@@ -39,10 +39,10 @@ void loop() {
                 digitalWrite(stepPin,LOW);
             }
             
-            should_run = '1';
+            should_run = 1;
             real_state = '2';
         }else{
-            should_run = '0';
+            should_run = 0;
             real_state = state;
         }
     }
