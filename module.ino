@@ -14,7 +14,13 @@ int real_state_x = '0';
 int should_run_y = 0;
 int real_state_y = '0';
 
-int spd = 380;
+int spd_x = 350;
+int initial_spd_x = 400;
+int real_spd_x = initial_spd_x;
+
+int spd_y = 350;
+int initial_spd_y = 400;
+int real_spd_y = initial_spd_y;
 
 void setup() {
   pinMode(step_pin_x,OUTPUT);
@@ -40,8 +46,9 @@ void loop() {
             digitalWrite(dir_pin_x,HIGH);
             
             if(real_state_x == 2){
+                real_spd_x = initial_spd_x;
                 // Should change dir
-                delayMicroseconds(spd);
+                delayMicroseconds(real_spd_x);
                 digitalWrite(step_pin_x,LOW);
             }
 
@@ -51,8 +58,9 @@ void loop() {
             digitalWrite(dir_pin_x,LOW);
 
             if(real_state_x == '1'){
+                real_spd_x = initial_spd_x;
                 // Should change dir
-                delayMicroseconds(spd);
+                delayMicroseconds(real_spd_x);
                 digitalWrite(step_pin_x,LOW);
             }
             
@@ -68,8 +76,9 @@ void loop() {
             digitalWrite(dir_pin_y2,LOW);
             
             if(real_state_y == 2){
+                real_spd_y = initial_spd_y;
                 // Should change dir
-                delayMicroseconds(spd);
+                delayMicroseconds(real_spd_y);
                 digitalWrite(step_pin_y1,LOW);
                 digitalWrite(step_pin_y2,LOW);
             }
@@ -81,8 +90,9 @@ void loop() {
             digitalWrite(dir_pin_y2,HIGH);
 
             if(real_state_y == '1'){
+                real_spd_y = initial_spd_y;
                 // Should change dir
-                delayMicroseconds(spd);
+                delayMicroseconds(real_spd_y);
                 digitalWrite(step_pin_y1,LOW);
                 digitalWrite(step_pin_y2,LOW);
             }
@@ -96,18 +106,22 @@ void loop() {
     }
 
     if(should_run_x){
-        delayMicroseconds(spd);
+        delayMicroseconds(real_spd);
         digitalWrite(step_pin_x,HIGH); 
-        delayMicroseconds(spd);
+        delayMicroseconds(real_spd);
         digitalWrite(step_pin_x,LOW);
     }
 
     if(should_run_y){
-        delayMicroseconds(spd);
+        delayMicroseconds(real_spd);
         digitalWrite(step_pin_y1,HIGH);
         digitalWrite(step_pin_y2,HIGH); 
-        delayMicroseconds(spd);
+        delayMicroseconds(real_spd);
         digitalWrite(step_pin_y1,LOW);
         digitalWrite(step_pin_y2,LOW);
     }
+
+    if(real_spd_x > spd_x && real_state_x != '0') real_spd_x--;
+
+    if(real_spd_y > spd_y && real_state_y != '0') real_spd_y--;
 }
